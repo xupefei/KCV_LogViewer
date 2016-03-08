@@ -15,7 +15,7 @@ namespace Grabacr07.KanColleViewer.Plugins
     [ExportMetadata("Guid", "E206BA74-39D8-4941-A238-EBD85582D21E")]
     [ExportMetadata("Title", "LogViewer")]
     [ExportMetadata("Description", "ドロップ・建造・開発ログを表示する。")]
-	[ExportMetadata("Version", "1.2")]
+	[ExportMetadata("Version", "1.3")]
 	[ExportMetadata("Author", "+PaddyXu")]
 	public class LogViewer : IPlugin, ITool
 	{
