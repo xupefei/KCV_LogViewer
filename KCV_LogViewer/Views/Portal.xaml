@@ -1,0 +1,134 @@
+﻿<UserControl x:Class="Grabacr07.KanColleViewer.Plugins.Views.Portal"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			 xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
+			 xmlns:viewModels="clr-namespace:Grabacr07.KanColleViewer.Plugins.ViewModels"
+			 xmlns:controls="clr-namespace:MetroTrilithon.Controls;assembly=MetroTrilithon.Desktop"
+			 xmlns:behaviors="clr-namespace:Grabacr07.KanColleViewer.Plugins.Behaviors"
+			 xmlns:controls1="clr-namespace:Grabacr07.KanColleViewer.Plugins.Controls"
+			 xmlns:converters="clr-namespace:Grabacr07.KanColleViewer.Plugins.Converters"
+			 mc:Ignorable="d"
+			 d:DesignHeight="300"
+			 d:DesignWidth="600"
+			 d:DataContext="{d:DesignInstance viewModels:PortalViewModel}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Icons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Themes/Dark.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/KanColleViewer;component/Styles/Controls.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <DockPanel Margin="3,0,3,3">
+        <Grid DockPanel.Dock="Top" DataContext="{Binding .}" Margin="3,0,3,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <RadioButton Grid.Column="0" Content="出撃ドロップ" IsChecked="{Binding SelectorShipDrop, Mode=TwoWay}" Margin="5,5,5,0"/>
+                <RadioButton Grid.Column="1" Content="艦船建造" IsChecked="{Binding SelectorBuildShip, Mode=TwoWay}" Margin="5,5,5,0"/>
+                <RadioButton Grid.Column="2" Content="装備開発" IsChecked="{Binding SelectorBuildItem, Mode=TwoWay}" Margin="5,5,5,0"/>
+                <metro2:CallMethodButton Grid.Column="4" MethodName="ToPreviousPage"
+                                         Visibility="{Binding HasPreviousPage, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="前ページへ" FontSize="10"/>
+                </metro2:CallMethodButton>
+                <metro2:CallMethodButton Grid.Column="5" MethodName="ToNextPage"
+                                         Visibility="{Binding HasNextPage, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="次ページへ" FontSize="10" />
+                </metro2:CallMethodButton>
+            </Grid>
+        </Grid>
+        <Border BorderBrush="{DynamicResource BorderBrushKey}"
+					BorderThickness="1"
+					Margin="0,8,0,8">
+            <ListView controls1:LogListView.LogSource="{Binding LogCollection}"
+						  ItemContainerStyle="{DynamicResource GridViewItemContainerStyleKey}"
+                          FontSize="11"
+						  ScrollViewer.PanningMode="Both"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                <i:Interaction.Behaviors>
+                    <behaviors:IgnoreMouseWheelBehavior />
+                    <behaviors:IsVisibleChangedBehaviour />
+                </i:Interaction.Behaviors>
+                <ListView.Resources>
+                    <!--<Style TargetType="{x:Type TextBlock}"
+							   BasedOn="{StaticResource DefaultTextStyleKey}">
+                        <Setter Property="Margin"
+									Value="5,4" />
+                    </Style>-->
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="OverridesDefaultStyle"
+									Value="True" />
+                        <Setter Property="BorderThickness"
+									Value="0,0,0,1" />
+                        <Setter Property="BorderBrush"
+									Value="{DynamicResource BorderBrushKey}" />
+                        <Setter Property="Background"
+									Value="{DynamicResource BackgroundBrushKey}" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                    <Grid>
+                                        <Border BorderThickness="{TemplateBinding BorderThickness}"
+													BorderBrush="{TemplateBinding BorderBrush}"
+													Background="{TemplateBinding Background}">
+                                            <ContentPresenter Margin="{TemplateBinding Padding}" />
+                                        </Border>
+                                        <Thumb x:Name="PART_HeaderGripper"
+												   HorizontalAlignment="Right"
+												   BorderBrush="{TemplateBinding BorderBrush}"
+												   Margin="0,0,-6,0">
+                                            <Thumb.Template>
+                                                <ControlTemplate TargetType="{x:Type Thumb}">
+                                                    <Border Background="Transparent"
+																Width="13">
+                                                        <Rectangle Width="1"
+																	   Stroke="{TemplateBinding BorderBrush}" />
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Thumb.Template>
+                                        </Thumb>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="120">
+                            <GridViewColumn.Header>
+                                <TextBlock FontSize="10">
+                                        PlaceHolder
+                                </TextBlock>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate DataType="{x:Type viewModels:LogItemCollection}">
+                                    <TextBlock Margin="0,4">
+											<Run Text="Placeholder"
+												 Foreground="{DynamicResource ActiveForegroundBrushKey}" />
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
+    </DockPanel>
+</UserControl>
